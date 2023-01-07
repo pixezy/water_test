@@ -1,0 +1,142 @@
+[gd_scene load_steps=22 format=3 uid="uid://dwk7bi2rd42pb"]
+
+[ext_resource type="PackedScene" path="res://terrain.tscn" id="1_qedw2"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_cm21l"]
+[ext_resource type="Shader" path="res://shaders/grass.gdshader" id="2_lfoxj"]
+[ext_resource type="Texture2D" uid="uid://bpyhw5awrmell" path="res://textures/grass.png" id="3_jocpg"]
+[ext_resource type="Texture2D" uid="uid://x5c62rwe3f35" path="res://textures/dirt_albedo.png" id="3_tgjqo"]
+[ext_resource type="Texture2D" uid="uid://deg0daigvqeks" path="res://textures/dirt_normal.png" id="4_6lofh"]
+[ext_resource type="Texture2D" uid="uid://c8btnuia6hc72" path="res://textures/grass_normal.png" id="4_rp47i"]
+[ext_resource type="Texture2D" uid="uid://dbiucbq07v8bs" path="res://textures/water_normal2.jpeg" id="8_2k6aa"]
+[ext_resource type="Texture2D" uid="uid://do37bxcf1mu1i" path="res://textures/foam.jpg" id="8_oq4ob"]
+[ext_resource type="PackedScene" uid="uid://b8qjtdhw5onwa" path="res://models/rock.glb" id="9_rvgkm"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3oqgw"]
+frequency = 0.004
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_d8ypi"]
+noise = SubResource("FastNoiseLite_3oqgw")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_dg1dw"]
+seed = 113
+frequency = 0.008
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fcirp"]
+noise = SubResource("FastNoiseLite_dg1dw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y40t1"]
+render_priority = 0
+shader = ExtResource("2_lfoxj")
+shader_parameter/normal_scale = 2.422
+shader_parameter/_grass_albedo = ExtResource("3_jocpg")
+shader_parameter/_grass_normal = ExtResource("4_rp47i")
+shader_parameter/_dirt_albedo = ExtResource("3_tgjqo")
+shader_parameter/_dirt_normal = ExtResource("4_6lofh")
+shader_parameter/_noise_grass = SubResource("NoiseTexture2D_d8ypi")
+shader_parameter/_noise_grass_dirt = SubResource("NoiseTexture2D_fcirp")
+
+[sub_resource type="GDScript" id="GDScript_rk6tl"]
+script/source = "extends MeshInstance3D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	process_mode = Node.PROCESS_MODE_DISABLED
+	pass
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_it1ir"]
+render_priority = 0
+shader = ExtResource("2_cm21l")
+shader_parameter/surface_color = Color(0.619608, 0.839216, 0.858824, 1)
+shader_parameter/depth_color = Color(0.223529, 0.780392, 0.831373, 1)
+shader_parameter/opacity = 1.0
+shader_parameter/normal_scale = 0.423001
+shader_parameter/beer_factor = 4.964
+shader_parameter/_roughness = 0.361
+shader_parameter/_refraction = 0.013
+shader_parameter/_uv_scale = 1.522
+shader_parameter/_foam_strength = 0.29
+shader_parameter/_foam_size = 0.167
+shader_parameter/_foam = ExtResource("8_oq4ob")
+shader_parameter/normal_map = ExtResource("8_2k6aa")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_kqpdn"]
+material = SubResource("ShaderMaterial_it1ir")
+size = Vector2(5, 5)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_fwm3h"]
+sky_curve = 0.289781
+sky_energy_multiplier = 2.0
+
+[sub_resource type="Sky" id="Sky_rrotl"]
+sky_material = SubResource("ProceduralSkyMaterial_fwm3h")
+
+[sub_resource type="Environment" id="Environment_l2bf1"]
+background_mode = 2
+sky = SubResource("Sky_rrotl")
+ambient_light_source = 3
+ambient_light_color = Color(1, 0.996078, 0.815686, 1)
+ambient_light_sky_contribution = 0.69
+reflected_light_source = 2
+tonemap_exposure = 1.98
+tonemap_white = 1.11
+ssao_intensity = 2.34
+fog_light_color = Color(0.843137, 0.819608, 0.741176, 1)
+fog_light_energy = 2.22
+fog_sun_scatter = 0.34
+fog_density = 0.0671
+fog_aerial_perspective = 0.124
+fog_sky_affect = 0.79
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.2237
+volumetric_fog_albedo = Color(0.65098, 0.65098, 0.65098, 1)
+adjustment_brightness = 0.95
+
+[node name="Node3D" type="Node3D"]
+
+[node name="terrain" parent="." instance=ExtResource("1_qedw2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.3, -0.1)
+
+[node name="Plane" parent="terrain" index="0"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 2.98023e-08, 0)
+material_override = SubResource("ShaderMaterial_y40t1")
+script = SubResource("GDScript_rk6tl")
+
+[node name="MI_water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0999999, 0.1, -0.4)
+mesh = SubResource("PlaneMesh_kqpdn")
+
+[node name="rock" parent="." instance=ExtResource("9_rvgkm")]
+transform = Transform3D(0.423245, 0.197363, 0, -0.197363, 0.423245, 0, 0, 0, 0.467, -0.7, -0.9, -0.3)
+
+[node name="rock2" parent="." instance=ExtResource("9_rvgkm")]
+transform = Transform3D(-0.216946, -0.266163, -0.323845, -0.128056, 0.389295, -0.234169, 0.399149, -0.0197704, -0.251143, 1.5, -0.2, 0.2)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_l2bf1")
+
+[node name="Camera3D" type="Camera3D" parent="WorldEnvironment"]
+transform = Transform3D(-0.891579, 0.317579, -0.322847, 0.0875632, 0.820338, 0.565136, 0.444319, 0.475594, -0.759205, -1.32287, 0.705699, -2.49978)
+fov = 70.0
+near = 0.001
+far = 1000.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.854848, 0.518878, 0, -0.518878, 0.854848, 0, 3.23726, 5.4461)
+light_color = Color(1, 1, 0.776471, 1)
+light_volumetric_fog_energy = 3.349
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 2.092
+shadow_blur = 0.908
+directional_shadow_split_1 = 0.265
+directional_shadow_split_2 = 0.356
+directional_shadow_split_3 = 0.271
+
+[editable path="terrain"]

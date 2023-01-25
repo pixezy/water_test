@@ -2,6 +2,8 @@ shader_type spatial;
 #include "res://$lib/funcs/normals.gdshaderinc"
 #include "res://$lib/funcs/utils.gdshaderinc"
 #include "res://$lib/funcs/colour.gdshaderinc"
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture,repeat_disable; 
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture,repeat_disable; 
 uniform vec3 surface_color:source_color;
 uniform vec3 depth_color:source_color;
 uniform float opacity:hint_range(0.0, 1.0)=0.5; 

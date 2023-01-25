@@ -1,6 +1,6 @@
 [gd_scene load_steps=22 format=3 uid="uid://dwk7bi2rd42pb"]
 
-[ext_resource type="PackedScene" path="res://terrain.tscn" id="1_qedw2"]
+[ext_resource type="PackedScene" uid="uid://be3v0u0aitvux" path="res://terrain.tscn" id="1_qedw2"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="2_cm21l"]
 [ext_resource type="Shader" path="res://shaders/grass.gdshader" id="2_lfoxj"]
 [ext_resource type="Texture2D" uid="uid://bpyhw5awrmell" path="res://textures/grass.png" id="3_jocpg"]
@@ -55,14 +55,14 @@ render_priority = 0
 shader = ExtResource("2_cm21l")
 shader_parameter/surface_color = Color(0.619608, 0.839216, 0.858824, 1)
 shader_parameter/depth_color = Color(0.223529, 0.780392, 0.831373, 1)
-shader_parameter/opacity = 1.0
-shader_parameter/normal_scale = 0.423001
-shader_parameter/beer_factor = 4.964
-shader_parameter/_roughness = 0.361
-shader_parameter/_refraction = 0.013
-shader_parameter/_uv_scale = 1.522
-shader_parameter/_foam_strength = 0.29
-shader_parameter/_foam_size = 0.167
+shader_parameter/opacity = 0.626
+shader_parameter/normal_scale = 0.503001
+shader_parameter/beer_factor = 6.992
+shader_parameter/_roughness = 0.031
+shader_parameter/_refraction = 0.014
+shader_parameter/_uv_scale = 0.907
+shader_parameter/_foam_strength = 0.575
+shader_parameter/_foam_size = 0.05
 shader_parameter/_foam = ExtResource("8_oq4ob")
 shader_parameter/normal_map = ExtResource("8_2k6aa")
 

@@ -17,7 +17,10 @@ uniform float _uv_scale:hint_range(0.0, 3.0)=1.0;
 uniform float _foam_strength: hint_range(0.0, 1.0); 
 uniform float _foam_size: hint_range(0.0, 0.2); 
 
-
+ //edit for godot beta 15
+uniform sampler2D DEPTH_TEXTURE : hint_depth_texture , filter_linear_mipmap;
+uniform sampler2D SCREEN_TEXTURE : hint_screen_texture , filter_linear_mipmap;
+//edit end
 
 void fragment() {
 	vec3 vw = (INV_VIEW_MATRIX * vec4(VERTEX,1.0)).xyz; 
